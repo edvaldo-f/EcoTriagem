@@ -10,8 +10,8 @@ seletiva, preparo antes do descarte e rota até o ponto de coleta mais próximo.
 Projeto Integrador Final da disciplina de Inteligência Artificial — AFYA / UNIMA Maceió.
 
 > **Situação atual:** todos os módulos (Visão, PLN, decisão, busca, integração e
-> interface) estão implementados e avaliados individualmente. Falta publicar a avaliação
-> de ponta a ponta do sistema completo e a avaliação com fotos reais tiradas pela equipe.
+> interface) estão implementados e avaliados, individualmente e no fluxo completo
+> (79,8% de acerto de ponta a ponta). Falta a avaliação com fotos reais tiradas pela equipe.
 
 ## Integrantes
 
@@ -470,17 +470,55 @@ A varredura do limiar confirma o 0,6 adotado: o sistema aceita 91,6% das fotos e
 
 ### Sistema completo
 
-**Pendente.** O script de avaliação de ponta a ponta já está pronto
-(`src.integracao.avaliar_sistema`) e agora roda com os dois modelos reais; falta
-executá-lo e publicar os números. A avaliação com fotos tiradas pela equipe
-(`dados/fotos_equipe/`) também está implementada e aguarda as fotos.
+Avaliação de ponta a ponta com os dois modelos reais
+(`python -m src.integracao.avaliar_sistema`, resultados em
+[`avaliacao_sistema.json`](resultados/metricas/avaliacao_sistema.json)). As 379
+imagens do conjunto de teste foram cruzadas com 56 perguntas de teste, que não aparecem
+no dataset do PLN, num total de **21.224 casos**. Um caso está correto quando o
+sistema entende a intenção e indica a lixeira certa para o material verdadeiro, ou
+quando pede reformulação para uma pergunta fora do escopo.
+
+| Desfecho | Casos | % |
+|---|---|---|
+| **Correto** | **16.934** | **79,8%** |
+| Pediu nova foto (visão abaixo do limiar) | 1.218 | 5,7% |
+| Erro originado no PLN | 2.274 | 10,7% |
+| Erro originado na visão | 798 | 3,8% |
+| Erro originado na decisão | 0 | 0,0% |
+
+![Desfecho dos casos na avaliação de ponta a ponta](resultados/graficos/avaliacao_desfechos.png)
+
+- **O PLN é a maior fonte de erro do sistema completo.** As 2.274 falhas vêm de 6 das 56
+  perguntas, repetidas em todas as imagens. Em 4 delas a intenção foi reconhecida, mas
+  com confiança abaixo do limiar de 0,5, e o sistema pediu reformulação. Nas outras 2,
+  a intenção prevista estava errada. Isso reforça a análise do limiar do PLN na seção
+  anterior.
+- **A visão acerta a classe exata em 89,5% das imagens, mas só 3,8% dos casos terminam
+  em erro de visão.** O limiar de 0,6 transforma parte dos erros em pedidos de nova foto
+  (29 imagens), e parte das confusões é entre materiais da mesma lixeira, como papel e
+  papelão.
+- **A heurística da lixeira (R3)** foi aplicada em apenas 3 imagens: acertou a lixeira
+  em 2, que sem ela teriam gerado pedido de nova foto, e errou em 1 (uma lata de metal
+  que a rede atribuiu a papel ou papelão). A amostra é pequena demais para conclusões.
+- **Por material**, o pior desempenho é o do rejeito (60,7%), a classe com menos
+  imagens no TrashNet. Os melhores são papelão (89,3%) e papel (87,6%).
+- **Tempo de resposta na CPU:** 14,5 ms por imagem na visão (p95 de 19,5 ms), 1,1 ms
+  por pergunta no PLN e menos de 0,1 ms na decisão.
+
+![Acerto do sistema por material verdadeiro](resultados/graficos/avaliacao_por_classe.png)
+
+Exemplos de cada desfecho, com a imagem e a saída de cada etapa, estão em
+[`resultados/exemplos/avaliacao/`](resultados/exemplos/avaliacao/).
+
+A avaliação com fotos tiradas pela equipe (`dados/fotos_equipe/`, suportada por
+`python -m src.machine_learning.avaliar`) aguarda as fotos.
 
 ## Limitações e trabalhos futuros
 
 **Limitações**
 
-- A avaliação de ponta a ponta do sistema completo e a avaliação com fotos reais
-  ainda não foram publicadas.
+- A avaliação usa as imagens do TrashNet e perguntas escritas pela equipe. Ainda não
+  há avaliação com fotos reais nem com perguntas de usuários reais.
 - O TrashNet tem fotos com fundo branco e um objeto por imagem. Espera-se queda de
   desempenho em fotos reais, com fundo e iluminação variados.
 - O sistema reconhece só 6 classes de material. Orgânicos, pilhas, eletrônicos e
@@ -494,7 +532,7 @@ executá-lo e publicar os números. A avaliação com fotos tiradas pela equipe
 
 **Trabalhos futuros**
 
-- Publicar a avaliação de ponta a ponta do sistema completo.
+- Avaliar o limiar de confiança do PLN no fluxo completo, a maior fonte de erro do sistema.
 - Avaliar o modelo de visão em fotos reais tiradas pela equipe.
 - Usar o objeto extraído pelo PLN (`objetos.py`) nas regras de decisão para os casos
   de descarte especial.

@@ -1,0 +1,87 @@
+{
+  "modelos": {
+    "Visão Computacional": "treinado",
+    "PLN": "treinado"
+  },
+  "n_imagens": 379,
+  "n_perguntas": 56,
+  "n_casos": 21224,
+  "taxa_acerto_sistema_pct": 79.79,
+  "desfechos": {
+    "correto": {
+      "n": 16934,
+      "pct": 79.79
+    },
+    "nova_foto": {
+      "n": 1218,
+      "pct": 5.74
+    },
+    "erro_pln": {
+      "n": 2274,
+      "pct": 10.71
+    },
+    "erro_visao": {
+      "n": 798,
+      "pct": 3.76
+    },
+    "erro_decisao": {
+      "n": 0,
+      "pct": 0.0
+    }
+  },
+  "acuracia_visao_classe_pct": 89.45,
+  "acuracia_pln_intencao_pct": 94.64,
+  "acerto_por_classe_pct": {
+    "lixo": 60.71,
+    "metal": 79.45,
+    "papel": 87.6,
+    "papelao": 89.29,
+    "plastico": 72.62,
+    "vidro": 75.29
+  },
+  "acerto_por_intencao_pct": {
+    "como_descartar": 65.5,
+    "como_preparar": 65.5,
+    "cor_lixeira": 76.42,
+    "e_reciclavel": 87.34,
+    "fora_do_escopo": 100.0,
+    "identificar": 76.42,
+    "ponto_coleta": 87.34
+  },
+  "regras": {
+    "R1": {
+      "n": 5306,
+      "pct": 25.0,
+      "acerto_pct": 57.14
+    },
+    "R2": {
+      "n": 14574,
+      "pct": 68.67,
+      "acerto_pct": 94.81
+    },
+    "R3": {
+      "n": 126,
+      "pct": 0.59,
+      "acerto_pct": 66.67
+    },
+    "R4": {
+      "n": 1218,
+      "pct": 5.74,
+      "acerto_pct": 0.0
+    }
+  },
+  "tempo": {
+    "visao_por_imagem": {
+      "media_ms": 14.5,
+      "p95_ms": 19.521
+    },
+    "pln_por_pergunta": {
+      "media_ms": 1.057,
+      "p95_ms": 1.169
+    },
+    "decisao_por_caso": {
+      "media_ms": 0.007,
+      "p95_ms": 0.034
+    }
+  }
+}
