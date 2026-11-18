@@ -585,8 +585,8 @@ Resíduos Sólidos.
 
 ## Artigo
 
-**Link do artigo:** será adicionado quando o projeto no Overleaf for criado (formato
-IEEE Conference, até 6 páginas).
+**Link do artigo:** https://www.overleaf.com/project/6afa604466228c8dee0cefe4/share#93e732c2088c81187325a670c2c197fb4ad5bc1ee88c640f.
+
 
 O texto-fonte e os materiais relacionados ao artigo ficam na pasta [`artigo/`](artigo/).
 Rascunhos já disponíveis:
